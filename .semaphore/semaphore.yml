@@ -25,8 +25,8 @@ blocks:
             - git clone https://github.com/operately/operately.git
             - cd operately
             - artifact pull workflow version
-            - make docker.build
-            - make release.tag.docker VERSION=$(cat version)
+            - docker build -f Dockerfile.prod -t operately/operately:$(cat version) .
+            - docker push operately/operately:$(cat version)
 
   - name: "GitHub Release"
     task:
