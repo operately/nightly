@@ -1,5 +1,7 @@
 # Operately Nightly Builds
 
+[![Build Status](https://operately.semaphoreci.com/badges/nightly/branches/master.svg?style=shields)](https://operately.semaphoreci.com/projects/nightly)
+
 This repository contains the scripts and configurations to generate nightly builds for Operately. 
 The nightly builds are generated every morning at 07:00 UTC, and are available for download as
 [releases in this repository](https://github.com/operately/nightly/releases).
