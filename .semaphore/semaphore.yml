@@ -10,17 +10,19 @@ blocks:
       jobs:
         - name: "Calculate Version"
           commands:
-            - git clone https://github.com/opearly/operately.git
+            - git clone https://github.com/operately/operately.git
             - cd operately
             - echo "nightly-build-$(date +%Y%m%d-%H%M%S)-$(git rev-parse --short HEAD)" > version
             - artifact push workflow version
 
   - name: "Docker Image"
     task:
+      secrets:
+        - name: docker-push
       jobs:
         - name: "Build Docker Image"
           commands:
-            - git clone https://github.com/opearly/operately.git
+            - git clone https://github.com/operately/operately.git
             - cd operately
             - artifact pull workflow version
             - make docker.build
@@ -28,10 +30,13 @@ blocks:
 
   - name: "GitHub Release"
     task:
+      secrets:
+        - name: github-token
       jobs:
         - name: "Build GitHub Release"
           commands:
-            - git clone https://github.com/opearly/operately.git
+            - git clone https://github.com/operately/operately.git
             - cd operately
             - artifact pull workflow version
             - make release.build.singlehost VERSION=$(cat version)
+            - make release.push.github.release VERSION=$(cat version) GITHUB_REPOSITORY=operately/nightly
