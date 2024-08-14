@@ -37,6 +37,7 @@ blocks:
           commands:
             - git clone https://github.com/operately/operately.git
             - cd operately
+            - mix local.rebar --force
             - artifact pull workflow version
             - make release.build.singlehost VERSION=$(cat version)
             - make release.push.github.release VERSION=$(cat version) GITHUB_REPOSITORY=operately/nightly
