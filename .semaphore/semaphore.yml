@@ -31,7 +31,7 @@ blocks:
   - name: "GitHub Release"
     task:
       secrets:
-        - name: github-token
+        - name: github-release-api-key
       jobs:
         - name: "Build GitHub Release"
           commands:
