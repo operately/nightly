@@ -34,3 +34,4 @@ cd operately
 ```bash
 docker compose up --wait --detach
 ```
+
