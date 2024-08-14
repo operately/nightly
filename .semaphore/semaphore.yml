@@ -1,0 +1,37 @@
+version: v1.0
+name: "Operately — Nightly Build"
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2004
+blocks:
+  - name: "Version"
+    task:
+      jobs:
+        - name: "Calculate Version"
+          commands:
+            - git clone https://github.com/opearly/operately.git
+            - cd operately
+            - echo "nightly-build-$(date +%Y%m%d-%H%M%S)-$(git rev-parse --short HEAD)" > version
+            - artifact push workflow version
+
+  - name: "Docker Image"
+    task:
+      jobs:
+        - name: "Build Docker Image"
+          commands:
+            - git clone https://github.com/opearly/operately.git
+            - cd operately
+            - artifact pull workflow version
+            - make docker.build
+            - make release.tag.docker VERSION=$(cat version)
+
+  - name: "GitHub Release"
+    task:
+      jobs:
+        - name: "Build GitHub Release"
+          commands:
+            - git clone https://github.com/opearly/operately.git
+            - cd operately
+            - artifact pull workflow version
+            - make release.build.singlehost VERSION=$(cat version)
