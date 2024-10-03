@@ -4,6 +4,7 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu2004
+
 blocks:
   - name: "Version"
     task:
@@ -41,3 +42,14 @@ blocks:
             - artifact pull workflow version
             - make release.build.singlehost VERSION=$(cat version)
             - make release.push.github.release VERSION=$(cat version) GITHUB_REPOSITORY=operately/nightly
+
+after_pipeline:
+  task:
+    secrets:
+      - name: discord-bot
+    jobs:
+      - name: "Notify Discord"
+        commands:
+          - artifact pull workflow version
+          - checkout
+          - ruby discord.rb $(cat version)
