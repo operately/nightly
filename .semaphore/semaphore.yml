@@ -50,6 +50,6 @@ after_pipeline:
     jobs:
       - name: "Notify Discord"
         commands:
-          - artifact pull workflow version
           - checkout
+          - artifact pull workflow version
           - ruby discord.rb $(cat version)
