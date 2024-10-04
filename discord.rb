@@ -1,52 +1,16 @@
 def passed_payload(version)
-  {
-    content: "Nightly build is ready for testing!",
-    embeds: [
-      {
-        title: "Nightly Build",
-        url: "https://github.com/operately/nightly/releases/tag/#{version}",
-        description: "The nightly build is ready for testing.",
-        color: 0x00ff00,
-        fields: [
-          {
-            name: "Build",
-            value: version,
-            inline: true
-          },
-          {
-            name: "Date",
-            value: Time.now.strftime("%Y-%m-%d %H:%M:%S"),
-            inline: true
-          }
-        ]
-      }
-    ]
-  }
+  workflow_id = ENV["SEMAPHORE_WORKFLOW_ID"]
+  workflow_url = "https://operately.semaphoreci.com/workflows/#{workflow_id}"
+  github_url = "https://github.com/operately/nightly/releases/tag/#{version}"
+
+  { "content": "Operately build is ready!\n\nWorkflow: [#{worfklow_id}](#{workflow_url})\nGitHub Release: [#{version}](#{github_url})" }
 end
 
 def failed_payload(version)
-  {
-    content: "Nightly build failed!",
-    embeds: [
-      {
-        title: "Nightly Build",
-        url: "https://operately.semaphoreci.com/workflows/#{ENV["SEMAPHORE_WORKFLOW_ID"]}",
-        color: 0xff0000,
-        fields: [
-          {
-            name: "Build",
-            value: version,
-            inline: true
-          },
-          {
-            name: "Date",
-            value: Time.now.strftime("%Y-%m-%d %H:%M:%S"),
-            inline: true
-          }
-        ]
-      }
-    ] 
-  }
+  workflow_id = ENV["SEMAPHORE_WORKFLOW_ID"]
+  workflow_url = "https://operately.semaphoreci.com/workflows/#{workflow_id}"
+
+  { "content": "Operately build is failed!\n\nWorkflow: [#{worfklow_id}](#{workflow_url})" }
 end
 
 result = ENV["SEMAPHORE_PIPELINE_RESULT"]
