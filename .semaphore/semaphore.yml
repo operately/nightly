@@ -36,6 +36,8 @@ blocks:
       jobs:
         - name: "Build GitHub Release"
           commands:
+            - kiex install 1.17.0
+            - sem-version elixir 1.17.0
             - git clone https://github.com/operately/operately.git
             - cd operately
             - mix local.rebar --force
