@@ -1,3 +1,7 @@
+require "net/http"
+require "json"
+require "uri"
+
 def passed_payload(version)
   workflow_id = ENV["SEMAPHORE_WORKFLOW_ID"]
   workflow_url = "https://operately.semaphoreci.com/workflows/#{workflow_id}"
