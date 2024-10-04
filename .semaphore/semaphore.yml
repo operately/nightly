@@ -36,6 +36,7 @@ blocks:
       jobs:
         - name: "Build GitHub Release"
           commands:
+            - sem-version erlang 27
             - kiex install 1.17.0
             - sem-version elixir 1.17.0
             - git clone https://github.com/operately/operately.git
