@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Enable containerd image store for multi-platform builds. Run with sudo
+# See: https://docs.docker.com/engine/storage/containerd/
+
+# try to install the config file
+config_file=/etc/docker/daemon.json
+
+if [ -f "$config_file" ]; then
+    echo "ERROR: $config_file already exists, aborting..."
+    exit 1
+fi
+
+echo '
+{
+  "features": {
+    "containerd-snapshotter": true
+  }
+}
+' > $config_file
+
+# restart docker daemon
+systemctl restart docker
+
+# check driver is expected
+expected_driver="io.containerd.snapshotter"
+current_driver=$(docker info -f '{{ .DriverStatus }}')
+
+echo "$current_driver" | grep -q "$expected_driver"
+if [ $? -ne 0 ]; then
+    echo "ERROR: expected Docker driver $expected_driver but got $current_driver instead"
+    exit 1
+fi
