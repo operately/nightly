@@ -15,8 +15,8 @@ blocks:
           commands:
             - artifact pull workflow version
             - docker pull operately/operately:$(cat version)
-            - docker tag operately/operately:$(cat version) operately/operately:$(RELEASE_VERSION)
-            - docker push operately/operately:$(RELEASE_VERSION)
+            - docker tag operately/operately:$(cat version) operately/operately:$RELEASE_VERSION
+            - docker push operately/operately:$RELEASE_VERSION
 
   - name: "GitHub Release"
     task:
