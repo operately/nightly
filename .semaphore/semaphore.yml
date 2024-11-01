@@ -56,3 +56,12 @@ after_pipeline:
           - checkout
           - artifact pull workflow version
           - ruby discord.rb $(cat version)
+
+promotions:
+  - name: Publish official release
+    pipeline_file: publish.yml
+    parameters:
+      env_vars:
+        - required: true
+          description: Release version
+          name: RELEASE_VERSION

@@ -1,0 +1,36 @@
+version: v1.0
+name: "Publish official release"
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2004
+
+blocks:
+  - name: "Docker Image"
+    task:
+      secrets:
+        - name: docker-push
+      jobs:
+        - name: "Release Docker Image"
+          commands:
+            - artifact pull workflow version
+            - docker pull operately/operately:$(cat version)
+            - docker tag operately/operately:$(cat version) operately/operately:$(RELEASE_VERSION)
+            - docker push operately/operately:$(RELEASE_VERSION)
+
+  - name: "GitHub Release"
+    task:
+      secrets:
+        - name: github-release-api-key
+      jobs:
+        - name: "Build GitHub Release"
+          commands:
+            - sem-version erlang 27
+            - kiex install 1.17.0
+            - sem-version elixir 1.17.0
+            - git clone https://github.com/operately/operately.git
+            - cd operately
+            - mix local.rebar --force
+            - artifact pull workflow version
+            - make release.build.singlehost VERSION=$RELEASE_VERSION
+            - make release.push.github.release VERSION=$RELEASE_VERSION GITHUB_REPOSITORY=operately/operately
