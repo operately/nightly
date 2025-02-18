@@ -9,7 +9,7 @@ workflow_id  = ENV["SEMAPHORE_WORKFLOW_ID"]
 workflow_url = "https://operately.semaphoreci.com/workflows/#{workflow_id}"
 github_url   = "https://github.com/operately/nightly/releases/tag/#{version}"
 
-passed_payload = { "content": "Operately build is ready!\n\nWorkflow: [#{workflow_id}](#{workflow_url})\nGitHub Release: [#{version}](<#{github_url}>)" }.to_json
+passed_payload = { "content": "Operately build is ready!\n\nWorkflow: [#{workflow_id}](<#{workflow_url}>)\nGitHub Release: [#{version}](<#{github_url}>)" }.to_json
 failed_payload = { "content": "Operately build failed!\nWorkflow: [#{workflow_id}](<#{workflow_url}>)" }.to_json
 
 uri = URI.parse(webhook_url)
