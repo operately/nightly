@@ -14,9 +14,8 @@ blocks:
         - name: "Release Docker Image"
           commands:
             - artifact pull workflow version
-            - docker pull operately/operately:$(cat version)
-            - docker tag operately/operately:$(cat version) operately/operately:$RELEASE_VERSION
-            - docker push operately/operately:$RELEASE_VERSION
+            - docker buildx imagetools create -t operately/operately:$RELEASE_VERSION operately/operately:$(cat version)
+            - docker buildx imagetools inspect operately/operately:$RELEASE_VERSION
 
   - name: "GitHub Release"
     task:

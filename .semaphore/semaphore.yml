@@ -26,8 +26,11 @@ blocks:
             - git clone https://github.com/operately/operately.git
             - cd operately
             - artifact pull workflow version
-            - docker build -f Dockerfile.prod -t operately/operately:$(cat version) .
-            - docker push operately/operately:$(cat version)
+            # Override DOCKER_IMAGE_TAGS so we do not also stamp :latest (that tag
+            # is published by Operately main CI).
+            - make docker.buildx.setup
+            - 'make docker.buildx.push DOCKER_IMAGE_TAGS="-t operately/operately:$(cat version)"'
+            - docker buildx imagetools inspect operately/operately:$(cat version)
 
   - name: "GitHub Release"
     task:
